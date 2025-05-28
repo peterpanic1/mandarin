@@ -1,0 +1,52 @@
+import React from "react";
+import { useState } from "react";
+
+const vocab = [
+  { word: "熊猫", pinyin: "xióng māo", english: "Panda", image: "https://upload.wikimedia.org/wikipedia/commons/0/0f/Grosser_Panda.JPG" },
+  { word: "苹果", pinyin: "píng guǒ", english: "Apple", image: "https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg" },
+  { word: "鸭子", pinyin: "yā zi", english: "Duck", image: "https://upload.wikimedia.org/wikipedia/commons/1/1d/Mallard2.jpg" }
+];
+
+function speak(text) {
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "zh-CN"; // Mandarin Chinese
+  window.speechSynthesis.speak(utterance);
+}
+
+export default function MandarinToddlersApp() {
+  const [started, setStarted] = useState(false);
+
+  return (
+    <div className="min-h-screen bg-yellow-100 flex flex-col items-center justify-center p-4">
+      {!started ? (
+        <div className="text-center">
+          <h1 className="text-4xl font-bold mb-4">🐼 Learn Mandarin with Fun!</h1>
+          <button
+            onClick={() => setStarted(true)}
+            className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-2xl text-xl shadow-lg"
+          >
+            Start Learning
+          </button>
+        </div>
+      ) : (
+        <div className="w-full max-w-xl">
+          <h2 className="text-3xl font-semibold text-center mb-6">Tap to Hear the Word!</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {vocab.map((item, index) => (
+              <div
+                key={index}
+                onClick={() => speak(item.word)}
+                className="bg-white rounded-2xl shadow-md p-4 text-center cursor-pointer hover:bg-yellow-200"
+              >
+                <img src={item.image} alt={item.english} className="w-full h-40 object-cover rounded-xl mb-2" />
+                <p className="text-xl font-medium">{item.word}</p>
+                <p className="text-sm text-gray-600">{item.pinyin}</p>
+                <p className="text-sm text-gray-500 italic">({item.english})</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+} 
